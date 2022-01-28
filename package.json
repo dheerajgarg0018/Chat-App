@@ -1,0 +1,16 @@
+{
+  "name": "talkies",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon backend/server.js"
+  },
+  "author": "Dheeraj",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^14.3.2",
+    "express": "^4.17.2",
+    "nodemon": "^2.0.15"
+  }
+}
