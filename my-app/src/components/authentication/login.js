@@ -3,33 +3,93 @@ import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
+import axios from "axios";
+import { useToast } from "@chakra-ui/react";
+import { useHistory } from "react-router-dom";
+
 
 const Login = () => {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [loading, setLoading] = useState(false);
+  const history = useHistory();
+  const toast = useToast();
 
   const handleClick = () => {
     setShow(!show);
   };
 
-  const SubmitHandler = () => {};
+  const SubmitHandler = async () => {
+    setLoading(true);
+    if (!email || !password) {
+      toast({
+        title: "Please Fill all the Feilds",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
+
+    console.log(email, password);
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/user/login",
+        { email, password },
+        config
+      );
+
+      console.log(JSON.stringify(data));
+      toast({
+        title: "Login Successful",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      setLoading(false);
+      history.push("/chats");
+    }
+    catch (error) {
+      toast({
+        title: "Error Occured!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+    }
+  };
 
   return (
     <VStack spacing="5px" color="black">
-      <FormControl id="email" isRequired>
+      <FormControl id="email1" isRequired>
         <FormLabel>Email</FormLabel>
         <Input
           placeholder="Enter Your email"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         ></Input>
       </FormControl>
-      <FormControl id="password" isRequired>
+      <FormControl id="password1" isRequired>
         <FormLabel>Password</FormLabel>
         <InputGroup size="md">
           <Input
             placeholder="Enter Your password"
             type={show ? "text" : "password"}
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
           ></Input>
           <InputRightElement width="4.5em">
@@ -43,7 +103,8 @@ const Login = () => {
         colorScheme="blue"
         width="100%"
         style={{ marginTop: 15 }}
-        onclick={SubmitHandler}
+        onClick={SubmitHandler}
+        isLoading= {loading}
       >
         Login
       </Button>
