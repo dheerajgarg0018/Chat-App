@@ -4,7 +4,7 @@ import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { useToast } from '@chakra-ui/toast';
 import { VStack } from "@chakra-ui/layout";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import axios from 'axios';
 
 const SignUp = () => {
@@ -14,12 +14,12 @@ const SignUp = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [confirmpassword, setConfirmpassword] = useState();
-  const [pic, setPic] = useState();
+  const [picture, setPicture] = useState();
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
-  const handleClick = () =>{setShow(!show)};
-  
+  const handleClick = () => { setShow(!show) };
+
   const SubmitHandler = async () => {
     setLoading(true);
     if (!name || !email || !password || !confirmpassword) {
@@ -45,6 +45,7 @@ const SignUp = () => {
       setLoading(false);
       return;
     }
+    // console.log(name, email, password, picture);
 
     try {
       const config = {
@@ -52,18 +53,19 @@ const SignUp = () => {
           "Content-type": "application/json",
         },
       };
+      // console.log(picture);
       const { data } = await axios.post(
         "/api/user",
         {
           name,
           email,
           password,
-          pic,
+          picture,
         },
         config
       );
 
-      console.log(data);
+      // console.log(data);
       toast({
         title: "Registration Successful",
         status: "success",
@@ -73,8 +75,8 @@ const SignUp = () => {
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      history.push("/chats");
-    } 
+      history.push("/chat");
+    }
     catch (error) {
       toast({
         title: "Error Occured!",
@@ -101,7 +103,7 @@ const SignUp = () => {
       });
       return;
     }
-    //console.log(pics);
+    // console.log(pics);
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
@@ -113,14 +115,15 @@ const SignUp = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setPic(data.url.toString());
-          //console.log(data.url.toString());
+          setPicture(data.url.toString());
+          // console.log(data.url.toString());
           setLoading(false);
         })
         .catch((err) => {
           console.log(err);
           setLoading(false);
         });
+        
     } else {
       toast({
         title: "Format is not acceptable.",
