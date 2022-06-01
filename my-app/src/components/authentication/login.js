@@ -7,7 +7,6 @@ import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 
-
 const Login = () => {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState();
@@ -59,11 +58,11 @@ const Login = () => {
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
       history.push("/chat");
-    }
-    catch (error) {
+    } catch (error) {
+      console.log(error.response);
       toast({
         title: "Error Occured!",
-        description: error.response.data.message,
+        // description: error.response.data.message,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -104,7 +103,7 @@ const Login = () => {
         width="100%"
         style={{ marginTop: 15 }}
         onClick={SubmitHandler}
-        isLoading= {loading}
+        isLoading={loading}
       >
         Login
       </Button>
