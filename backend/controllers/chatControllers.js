@@ -129,11 +129,11 @@ const addToGroup = asyncHandler(async (req, res) => {
   const { chatId, userId } = req.body;
   const added = await Chat.findByIdAndUpdate(
     chatId,
-    { $addToSet: { users: userId }, },
+    { $addToSet: { users: userId } },
     { new: true }
   )
-   .populate("users", "-password")
-   .populate("groupAdmin", "-password");
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
 
   if (!added) {
     res.status(404);
@@ -145,32 +145,35 @@ const addToGroup = asyncHandler(async (req, res) => {
 
 const removeFromGroup = asyncHandler(async (req, res) => {
   const { chatId, userId } = req.body;
-  
-  //Checking if user has permission to remove members from group
-  const currchat = await Chat.findById(chatId).populate("groupAdmin","-password")
-    
-    if (currchat.groupAdmin._id.toString() !== req.user._id.toString()) {
-        return res.status(400).send("Only Admin can remove.");
-    }
 
-    if (userId === currchat.groupAdmin._id.toString()) {
-        return res.status(400).send("You cannot remove admin.");
-    }
-    
-    const removed = await Chat.findByIdAndUpdate(
+  //Checking if user has permission to remove members from group
+  const currchat = await Chat.findById(chatId).populate(
+    "groupAdmin",
+    "-password"
+  );
+
+  // if (currchat.groupAdmin._id.toString() !== req.user._id.toString()) {
+  //   return res.status(400).send("Only Admin can remove.");
+  // }
+
+  // if (userId === currchat.groupAdmin._id.toString()) {
+  //   return res.status(400).send("You cannot remove admin.");
+  // }
+
+  const removed = await Chat.findByIdAndUpdate(
     chatId,
     { $pull: { users: userId } },
     { new: true }
   )
-  .populate("users", "-password")
-  .populate("groupAdmin", "-password");
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
 
-    if (!removed) {
-        res.status(404);
-        throw new Error("Chat Not Found");
-    } else {
-        res.json(removed);
-    }
+  if (!removed) {
+    res.status(404);
+    throw new Error("Chat Not Found");
+  } else {
+    res.json(removed);
+  }
 });
 
 module.exports = {

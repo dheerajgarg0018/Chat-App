@@ -43,12 +43,11 @@ const GroupChatModal = ({ children }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get(`/api/user?search=${search}`, config);
-      console.log(data);
+      const { data } = await axios.get(`/api/user?search=${query}`, config);
+      // console.log(data);
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
-      setLoading(false);
       toast({
         title: "Error Occured!",
         description: "Failed to Load the Search Results",
@@ -57,6 +56,7 @@ const GroupChatModal = ({ children }) => {
         isClosable: true,
         position: "bottom-left",
       });
+      setLoading(false);
     }
   };
 

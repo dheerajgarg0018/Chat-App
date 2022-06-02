@@ -1,4 +1,4 @@
-const getSender = (loggedUser, users) => {
+export const getSender = (loggedUser, users) => {
   if (users)
     return users[0]._id === loggedUser._id ? users[1].name : users[0].name;
   else {
@@ -6,5 +6,12 @@ const getSender = (loggedUser, users) => {
     return;
   }
 };
+export const getSenderFull = (loggedUser, users) => {
+  if (users) return users[0]._id === loggedUser._id ? users[1] : users[0];
+  else {
+    console.log("users is empty");
+    return;
+  }
+};
 
-export default getSender;
+// export default getSender;
