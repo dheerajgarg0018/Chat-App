@@ -5,7 +5,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { getSender, getSenderFull } from "../config/ChatLogics";
 import ChatLoading from "./ChatLoading";
-//  import GroupChatModal from "./miscellaneous/GroupChatModal";
 import { Button } from "@chakra-ui/react";
 import { ChatState } from "../context/chatProvider";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
@@ -17,6 +16,7 @@ const MyChats = ({ fetchAgain }) => {
   const toast = useToast();
 
   const fetchChat = async () => {
+    // console.log(user);
     try {
       const config = {
         headers: {
@@ -26,7 +26,7 @@ const MyChats = ({ fetchAgain }) => {
 
       const { data } = await axios.get("/api/chat", config);
       setChats(data);
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.log(error);
       toast({
@@ -114,7 +114,6 @@ const MyChats = ({ fetchAgain }) => {
         )}
       </Box>
     </Box>
-    // </Box>
   );
 };
 

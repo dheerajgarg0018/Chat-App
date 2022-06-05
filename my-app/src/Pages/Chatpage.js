@@ -6,12 +6,19 @@ import ChatBox from "../components/ChatBox";
 import SideDrawer from "../components/miscellaneous/SideDrawer";
 
 const Chatpage = () => {
+  (() => {
+    if (window.localStorage) {
+      if (!localStorage.getItem("reload")) {
+        localStorage["reload"] = true;
+        window.location.reload();
+      }
+    }
+  })();
+
   const [fetchAgain, setFetchAgain] = useState(false);
   const { user } = ChatState();
 
-  const user1 = JSON.parse(localStorage.getItem("userInfo"));
-  console.log(user1);
-  console.log(user);
+  // console.log(user);
 
   return (
     <div style={{ width: "100%" }}>

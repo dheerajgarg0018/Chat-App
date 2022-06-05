@@ -47,7 +47,7 @@ const Login = () => {
         config
       );
 
-      console.log(JSON.stringify(data));
+      // console.log(JSON.stringify(data));
       toast({
         title: "Login Successful",
         status: "success",
@@ -55,19 +55,20 @@ const Login = () => {
         isClosable: true,
         position: "bottom",
       });
+
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
       history.push("/chat");
     } catch (error) {
       console.log(error.response);
-      toast({
-        title: "Error Occured!",
-        // description: error.response.data.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
+      // toast({
+      //   title: "Error Occured!",
+      //   // description: error.response.data.message,
+      //   status: "error",
+      //   duration: 5000,
+      //   isClosable: true,
+      //   position: "bottom",
+      // });
       setLoading(false);
     }
   };

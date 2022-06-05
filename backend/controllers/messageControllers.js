@@ -5,7 +5,8 @@ const Chat = require("../models/chatModel");
 
 const sendMessage = asyncHandler(async (req, res) => {
   const { content, chatId } = req.body;
-
+  // console.log(content);
+  // console.log(chatId);
   if (!content || !chatId) {
     console.log("Invalid data passed into request");
     return res.sendStatus(400);
@@ -25,7 +26,7 @@ const sendMessage = asyncHandler(async (req, res) => {
       path: "chat.users",
       select: "name picture email",
     });
-    console.log(message);
+    // console.log(message);
 
     await Chat.findByIdAndUpdate(req.body.chatId, {
       latestMessage: message,
