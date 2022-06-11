@@ -6,6 +6,7 @@ const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
+const path = require("path");
 const app = express();
 
 app.use(express.json());
@@ -13,13 +14,22 @@ app.use(express.json());
 dotenv.config();
 connectDB();
 
-app.get("/", (req, res) => {
-  res.send("API is running successfully");
-});
-
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
+
+const __dirname1 = path.resolve();
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname1, "/my-app/build")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname1, "my-app", "build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running successfully");
+  });
+}
 
 app.use(notFound);
 app.use(errorHandler);
@@ -56,7 +66,7 @@ io.on("connection", (socket) => {
 
   socket.on("join chat", (room) => {
     socket.join(room);
-    console.log("User joined room: " + room);
+    // console.log("User joined room: " + room);
   });
 
   socket.on("typing", (room) => socket.in(room).emit("typing"));
@@ -72,6 +82,11 @@ io.on("connection", (socket) => {
 
       socket.in(user._id).emit("message received", newMessageReceived);
     });
+  });
+
+  socket.off("join chat", () => {
+    console.log("USER LEFT ROOM: " + room);
+    socket.leave(room);
   });
 
   socket.off("setup", () => {
