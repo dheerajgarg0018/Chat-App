@@ -16,8 +16,8 @@ import axios from "axios";
 import "./styles.css";
 import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
-import Lottie from "react-lottie";
-import animationData from "../animations/typing.json";
+// import Lottie from "react-lottie";
+// import animationData from "../animations/typing.json";
 
 const ENDPOINT = "https://mern-walkie-talkie.herokuapp.com/";
 var socket, selectedChatCompare;
@@ -32,14 +32,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   const toast = useToast();
 
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
+  // const defaultOptions = {
+  //   loop: true,
+  //   autoplay: true,
+  //   animationData: animationData,
+  //   rendererSettings: {
+  //     preserveAspectRatio: "xMidYMid slice",
+  //   },
+  // };
 
   const { user, selectedChat, setSelectedChat, notification, setNotification } =
     ChatState();
@@ -233,12 +233,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             <FormControl onKeyDown={sendMessage} isRequired mt={3}>
               {isTyping ? (
                 <div>
-                  <Lottie
+                  Typing...
+                  {/* <Lottie
                     options={defaultOptions}
                     height={50}
                     width={100}
                     style={{ marginBottom: 0, marginLeft: 0 }}
-                  />
+                  /> */}
                 </div>
               ) : (
                 <></>

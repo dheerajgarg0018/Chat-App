@@ -31,8 +31,9 @@ import { ChatState } from "../../context/chatProvider";
 import ChatLoading from "../ChatLoading";
 import UserListItem from "../UserAvatar/UserListItem";
 import { getSender } from "../../config/ChatLogics";
-import { Effect } from "react-notification-badge";
-import NotificationBadge from "react-notification-badge";
+// import { Effect } from "react-notification-badge";
+// import NotificationBadge from "react-notification-badge";
+import Noty from "./Noty";
 
 export const SideDrawer = () => {
   const [search, setSearch] = useState("");
@@ -154,12 +155,17 @@ export const SideDrawer = () => {
         </Text>
         <div>
           <Menu>
-            <MenuButton p={1}>
-              <NotificationBadge
+            <MenuButton p={1} marginRight={3}>
+              <Noty
+                width={"25px"}
+                color={"#122C34"}
+                count={notification.length}
+              />
+              {/* <NotificationBadge
                 count={notification.length}
                 effect={Effect.SCALE}
               />
-              <BellIcon fontSize="2x1" m={1} />
+              <BellIcon fontSize="2x1" m={1} /> */}
             </MenuButton>
             <MenuList pl={2}>
               {!notification.length && "No New Messages"}
