@@ -19,7 +19,8 @@ import io from "socket.io-client";
 // import Lottie from "react-lottie";
 // import animationData from "../animations/typing.json";
 
-const ENDPOINT = "https://mern-walkie-talkie.herokuapp.com/";
+//const ENDPOINT = "https://mern-walkie-talkie.herokuapp.com/";
+const ENDPOINT = "localhost:5000";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
