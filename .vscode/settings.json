@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/c0250de7-c21c-4fec-b1a5-a3f91d39794c/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/chat-app-walkieTalkie",
+    "appService.deploySubpath": "."
+}

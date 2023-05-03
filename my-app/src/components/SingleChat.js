@@ -10,6 +10,7 @@ import {
   Spinner,
   useToast,
   FormControl,
+  FormLabel,
   Input,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -19,7 +20,7 @@ import io from "socket.io-client";
 // import Lottie from "react-lottie";
 // import animationData from "../animations/typing.json";
 
-// const ENDPOINT = "https://mern-walkie-talkie.herokuapp.com/";
+// const ENDPOINT = "https://chat-app-walkietalkie.azurewebsites.net/";
 const ENDPOINT = "localhost:5000";
 var socket, selectedChatCompare;
 
@@ -41,6 +42,60 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   //     preserveAspectRatio: "xMidYMid slice",
   //   },
   // };
+
+  const [selectedFile, setSelectedFile] = useState("");
+  const [FileName, setFileName] = useState("");
+
+  const postDetails = (file) => {
+    setLoading(true);
+
+    if (file === undefined) {
+      toast({
+        title: "File Not selected.",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+
+      setLoading(false);
+      return;
+    }
+    console.log(file);
+    const fileName = file.name;
+    console.log(fileName);
+    // if (file.type === "image/jpeg" || file.type === "image/png") {
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "Chat-App");
+    data.append("cloud_name", "dq1sgq78o");
+    fetch("https://api.cloudinary.com/v1_1/dq1sgq78o/raw/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setFileName(fileName.toString());
+        setSelectedFile(data.url.toString());
+        console.log(data.url.toString());
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+    // } else {
+    //   toast({
+    //     title: "Format is not acceptable.",
+    //     status: "warning",
+    //     duration: 5000,
+    //     isClosable: true,
+    //     position: "bottom",
+    //   });
+    //   setLoading(false);
+    //   return;
+    // }
+  };
 
   const { user, selectedChat, setSelectedChat, notification, setNotification } =
     ChatState();
@@ -136,7 +191,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   });
 
   const sendMessage = async (event) => {
-    if (event.key === "Enter" && newMessage) {
+    if (event.key === "Enter" && (newMessage || selectedFile)) {
       socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
@@ -146,19 +201,25 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
         };
         setNewMessage("");
+        setSelectedFile("");
+        setFileName("");
+        console.log(selectedFile);
         const { data } = await axios.post(
           "/api/message",
           {
             content: newMessage,
+            fileUrl: selectedFile,
+            fileName: FileName,
             chatId: selectedChat._id,
           },
           config
         );
 
-        // console.log(data);
+        console.log(data);
 
         socket.emit("new message", data);
         setMessages([...messages, data]);
+        document.getElementById("file").value = "";
       } catch (error) {
         toast({
           title: "Error Occured!",
@@ -253,6 +314,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 onChange={typingHandler}
                 value={newMessage}
               />
+              <FormControl id="file">
+                {/* <FormLabel>Send File</FormLabel> */}
+                <Input
+                  type="file"
+                  p="1.5"
+                  accept="raw/*"
+                  onChange={(e) => postDetails(e.target.files[0])}
+                ></Input>
+              </FormControl>
             </FormControl>
           </Box>
         </>

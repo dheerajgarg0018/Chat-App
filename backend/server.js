@@ -1,6 +1,5 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const { chats } = require("./data/data");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
@@ -52,6 +51,7 @@ const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
     origin: "http://localhost:3000",
+    // origin: "*:*",
   },
 });
 

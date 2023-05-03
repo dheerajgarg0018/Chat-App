@@ -8,6 +8,7 @@ import {
   isSameUser,
 } from "../config/ChatLogics";
 import { ChatState } from "../context/chatProvider";
+import { color } from "@chakra-ui/react";
 
 const ScrollableChat = ({ messages }) => {
   const { user } = ChatState();
@@ -43,6 +44,15 @@ const ScrollableChat = ({ messages }) => {
               }}
             >
               {m.content}
+              {m.content.length > 0 && <br></br>}
+              {m.fileUrl && (
+                <a href={m.fileUrl} target="_blank" rel="noopener noreferrer">
+                  <mark>
+                    <u>{m.fileName}</u>
+                  </mark>
+                </a>
+              )}
+              {/* {((m.content.length > 0) && (m.fileUrl.length > 0)) ? {{m.fileUrl} + "\n" + m.content} : {(m.fileUrl.length > 0) ? {m.fileUrl} : {m.content}}} */}
             </span>
           </div>
         ))}
